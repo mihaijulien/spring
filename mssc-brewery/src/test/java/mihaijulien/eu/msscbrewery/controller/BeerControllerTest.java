@@ -82,7 +82,7 @@ public class BeerControllerTest {
         String BeerDTOJson = objectMapper.writeValueAsString(BeerDTO);
 
         //when
-        mockMvc.perform(put("/api/v1/beer/" + validBeer.getId())
+        mockMvc.perform(put("/api/v1/beer/" + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(BeerDTOJson))
                 .andExpect(status().isNoContent());
