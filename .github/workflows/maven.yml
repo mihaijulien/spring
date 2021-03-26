@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: mssc-brewery
+        working-directory: mssc-brewery-service
 
     steps:
     - uses: actions/checkout@v2
