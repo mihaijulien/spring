@@ -9,13 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mihaijulien.eu</groupId>
-	<artifactId>mssc-brewery</artifactId>
+	<artifactId>mssc-brewery-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mssc-brewery</name>
 	<description>SFG Brewery</description>
 	<properties>
-		<java.version>11</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
