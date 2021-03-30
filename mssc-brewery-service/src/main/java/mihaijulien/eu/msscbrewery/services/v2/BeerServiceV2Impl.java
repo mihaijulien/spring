@@ -4,10 +4,12 @@ import mihaijulien.eu.msscbrewery.web.model.v2.BeerDTOv2;
 import mihaijulien.eu.msscbrewery.web.model.v2.BeerStyleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Service
 public class BeerServiceV2Impl implements BeerServiceV2 {
     Logger logger = LoggerFactory.getLogger(BeerServiceV2Impl.class);
 
