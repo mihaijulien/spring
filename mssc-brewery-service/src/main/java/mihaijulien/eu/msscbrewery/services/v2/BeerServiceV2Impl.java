@@ -37,7 +37,7 @@ public class BeerServiceV2Impl implements BeerServiceV2 {
     public BeerDTOv2 saveNewBeer(BeerDTOv2 beerDTOv2) {
         return BeerDTOv2.builder().id(UUID.randomUUID())
                 .beerName(beerDTOv2.getBeerName())
-                .beerStyle(BeerStyleEnum.valueOf(beerDTOv2.getBeerName()))
+                .beerStyle(beerDTOv2.getBeerStyle())
                 .price(beerDTOv2.getPrice())
                 .version(2)
                 .build();
