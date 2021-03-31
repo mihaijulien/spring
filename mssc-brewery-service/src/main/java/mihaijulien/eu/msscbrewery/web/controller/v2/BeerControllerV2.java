@@ -7,6 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/v2/beer")
@@ -19,14 +24,14 @@ public class BeerControllerV2 {
     }
 
     @GetMapping("/{beerId}")
-    public ResponseEntity<BeerDTOv2> getBeer(@PathVariable("beerId") UUID beerId){
+    public ResponseEntity<BeerDTOv2> getBeer(@NotNull @PathVariable("beerId") UUID beerId){
 
         // TODO impl
         return new ResponseEntity<>(beerService.getBeerById(beerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<BeerDTOv2> saveNewBeer(@RequestBody BeerDTOv2 beerDTOv2){
+    public ResponseEntity<BeerDTOv2> saveNewBeer(@Valid @NotNull @RequestBody BeerDTOv2 beerDTOv2){
         BeerDTOv2 savedBeerDTO = beerService.saveNewBeer(beerDTOv2);
 
         // TODO impl
@@ -34,7 +39,7 @@ public class BeerControllerV2 {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity<BeerDTOv2> updateBeer(@PathVariable UUID beerID,  @RequestBody BeerDTOv2 beerDTOv2){
+    public ResponseEntity<BeerDTOv2> updateBeer(@PathVariable UUID beerID, @Valid @RequestBody BeerDTOv2 beerDTOv2){
         beerService.updateBeer(beerID, beerDTOv2);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -44,5 +49,16 @@ public class BeerControllerV2 {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBeer(@PathVariable UUID beerId){
         beerService.deleteById(beerId);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List> validationErrorHandler(ConstraintViolationException e){
+        List<String> errors = new ArrayList<>(e.getConstraintViolations().size());
+
+        e.getConstraintViolations().forEach(constraintViolation -> {
+            errors.add(constraintViolation.getPropertyPath() + " : " + constraintViolation.getMessage());
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
