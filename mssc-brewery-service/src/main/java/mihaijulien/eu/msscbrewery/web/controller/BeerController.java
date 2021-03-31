@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Deprecated
@@ -27,7 +29,7 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity<BeerDTO> handlePost(@RequestBody BeerDTO beerDTO){
+    public ResponseEntity<BeerDTO> handlePost(@Valid @NotNull @RequestBody BeerDTO beerDTO){
         BeerDTO savedBeerDTO = beerService.saveNewBeer(beerDTO);
 
         HttpHeaders headers = new HttpHeaders();
@@ -37,7 +39,7 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity<BeerDTO> handlePut(@PathVariable("beerId") UUID beerID,  @RequestBody BeerDTO beerDTO){
+    public ResponseEntity<BeerDTO> handlePut(@PathVariable("beerId") UUID beerID,  @Valid @RequestBody BeerDTO beerDTO){
         beerService.updateBeer(beerID, beerDTO);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
