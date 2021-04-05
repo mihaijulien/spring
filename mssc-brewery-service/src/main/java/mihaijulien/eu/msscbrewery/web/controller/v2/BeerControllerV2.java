@@ -25,8 +25,6 @@ public class BeerControllerV2 {
 
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDTOv2> getBeer(@NotNull @PathVariable("beerId") UUID beerId){
-
-        // TODO impl
         return new ResponseEntity<>(beerService.getBeerById(beerId), HttpStatus.OK);
     }
 
@@ -34,21 +32,21 @@ public class BeerControllerV2 {
     public ResponseEntity<BeerDTOv2> saveNewBeer(@Valid @NotNull @RequestBody BeerDTOv2 beerDTOv2){
         BeerDTOv2 savedBeerDTO = beerService.saveNewBeer(beerDTOv2);
 
-        // TODO impl
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(savedBeerDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{beerId}")
     public ResponseEntity<BeerDTOv2> updateBeer(@PathVariable UUID beerID, @Valid @RequestBody BeerDTOv2 beerDTOv2){
-        beerService.updateBeer(beerID, beerDTOv2);
+        BeerDTOv2 updatedBeerDTOv2 = beerService.updateBeer(beerID, beerDTOv2);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(updatedBeerDTOv2, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBeer(@PathVariable UUID beerId){
+    public ResponseEntity<BeerDTOv2> deleteBeer(@PathVariable UUID beerId){
         beerService.deleteById(beerId);
-    }
 
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

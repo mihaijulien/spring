@@ -1,45 +1,51 @@
 package mihaijulien.eu.msscbrewery.services.v2;
 
+import mihaijulien.eu.msscbrewery.domain.Beer;
+import mihaijulien.eu.msscbrewery.repositories.BeerRepository;
+import mihaijulien.eu.msscbrewery.web.controller.v2.NotFoundException;
+import mihaijulien.eu.msscbrewery.web.mappers.BeerMapper;
 import mihaijulien.eu.msscbrewery.web.model.v2.BeerDTOv2;
-import mihaijulien.eu.msscbrewery.web.model.v2.BeerStyleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
 public class BeerServiceV2Impl implements BeerServiceV2 {
     Logger logger = LoggerFactory.getLogger(BeerServiceV2Impl.class);
+    private final BeerMapper beerMapper;
+    private final BeerRepository beerRepository;
 
-    @Override
-    public BeerDTOv2 getBeerById(UUID beerId) {
-        return BeerDTOv2.builder().id(UUID.randomUUID())
-                .beerName("Galaxy Cat")
-                .beerStyle(BeerStyleEnum.IPA)
-                .price(BigDecimal.valueOf(45.0))
-                .version(2)
-                .build();
+    public BeerServiceV2Impl(BeerMapper beerMapper, BeerRepository beerRepository) {
+        this.beerMapper = beerMapper;
+        this.beerRepository = beerRepository;
     }
 
     @Override
-    public void updateBeer(UUID beerID, BeerDTOv2 beerDTOv2) {
-        logger.info("Beer updated");
+    public BeerDTOv2 getBeerById(UUID beerId) {
+        return beerMapper.beerToBeerDTO(beerRepository.findById(beerId).orElseThrow(() -> new NotFoundException()));
+    }
+
+    @Override
+    public BeerDTOv2 updateBeer(UUID beerID, BeerDTOv2 beerDTOv2) {
+        Beer beer = beerRepository.findById(beerID).orElseThrow(NotFoundException::new);
+
+        beer.setBeerName(beerDTOv2.getBeerName());
+        beer.setBeerStyle(beerDTOv2.getBeerStyle().name());
+        beer.setPrice(beerDTOv2.getPrice());
+        beer.setUpc(beerDTOv2.getUpc());
+
+        return beerMapper.beerToBeerDTO(beerRepository.save(beer));
     }
 
     @Override
     public void deleteById(UUID beerId) {
-        logger.info("Deleting a beer");
+        beerRepository.deleteById(beerId);
     }
 
     @Override
     public BeerDTOv2 saveNewBeer(BeerDTOv2 beerDTOv2) {
-        return BeerDTOv2.builder().id(UUID.randomUUID())
-                .beerName(beerDTOv2.getBeerName())
-                .beerStyle(beerDTOv2.getBeerStyle())
-                .price(beerDTOv2.getPrice())
-                .version(2)
-                .build();
+        return beerMapper.beerToBeerDTO(beerRepository.save(beerMapper.beerDTOtoBeer(beerDTOv2)));
     }
 }
