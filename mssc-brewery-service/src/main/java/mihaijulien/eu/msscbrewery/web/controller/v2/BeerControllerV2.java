@@ -4,6 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import mihaijulien.eu.msscbrewery.services.v2.BeerServiceV2;
 import mihaijulien.eu.msscbrewery.web.model.v2.BeerDTOv2;
+import mihaijulien.eu.msscbrewery.web.model.v2.BeerPagedList;
+import mihaijulien.eu.msscbrewery.web.model.v2.BeerStyleEnum;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +19,32 @@ import java.util.UUID;
 @RequestMapping("/api/v2/beer")
 @RestController
 public class BeerControllerV2 {
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 25;
+
     private final BeerServiceV2 beerService;
 
     public BeerControllerV2(BeerServiceV2 beerService) {
         this.beerService = beerService;
+    }
+
+    @GetMapping(produces = { "application/json" }, path = "beer")
+    public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                                   @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                   @RequestParam(value = "beerName", required = false) String beerName,
+                                                   @RequestParam(value = "beerStyle", required = false) BeerStyleEnum beerStyle){
+
+        if (pageNumber == null || pageNumber < 0){
+            pageNumber = DEFAULT_PAGE_NUMBER;
+        }
+
+        if (pageSize == null || pageSize < 1) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        BeerPagedList beerList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize));
+
+        return new ResponseEntity<>(beerList, HttpStatus.OK);
     }
 
     @GetMapping("/{beerId}")
