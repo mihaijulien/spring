@@ -9,6 +9,7 @@ import mihaijulien.eu.msscbrewery.web.model.v2.BeerPagedList;
 import mihaijulien.eu.msscbrewery.web.model.v2.BeerStyleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,11 @@ public class BeerServiceV2Impl implements BeerServiceV2 {
         this.beerRepository = beerRepository;
     }
 
+    @Cacheable(cacheNames = "beerListCache")
     @Override
     public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest) {
 
+        System.out.println("Method called"); // for testing purposes, the method will not be called everytime, we will pull the data directly out of the cache
         BeerPagedList beerPagedList;
         Page<Beer> beerPage;
 
@@ -60,6 +63,7 @@ public class BeerServiceV2Impl implements BeerServiceV2 {
         return beerPagedList;
     }
 
+    @Cacheable(cacheNames = "beerCache", key = "#beerId")
     @Override
     public BeerDTOv2 getBeerById(UUID beerId) {
         return beerMapper.beerToBeerDTO(beerRepository.findById(beerId).orElseThrow(() -> new NotFoundException()));
