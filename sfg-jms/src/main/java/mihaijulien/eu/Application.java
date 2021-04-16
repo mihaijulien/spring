@@ -1,4 +1,4 @@
-package mihaijulien.eu.application;
+package mihaijulien.eu;
 import org.apache.activemq.artemis.core.config.impl.ConfigurationImpl;
 import org.apache.activemq.artemis.core.server.ActiveMQServer;
 import org.apache.activemq.artemis.core.server.ActiveMQServers;
