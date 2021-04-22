@@ -1,4 +1,4 @@
-package mihaijulien.eu.msscbrewery.services;
+package mihaijulien.eu.msscbrewery.services.brewing;
 
 import mihaijulien.eu.msscbrewery.config.JmsConfig;
 import mihaijulien.eu.msscbrewery.events.BrewBeerEvent;
