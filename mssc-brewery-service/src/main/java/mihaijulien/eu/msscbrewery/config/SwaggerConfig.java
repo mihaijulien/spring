@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("mihaijulien.eu.msscbrewery.web.controller.v2"))
+                .apis(RequestHandlerSelectors.basePackage("mihaijulien.eu.msscbrewery.web.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

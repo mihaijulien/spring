@@ -12,7 +12,18 @@
 **Beer Service** is responsible for generating the Beer objects used in the application and stores that Beer object data in a database. 
 **Beer Order Service** and **Beer Inventory** make calls to **Beer Service** to get information about the Beer objects.
 
-
+Beer object example:
+```json5
+{
+  "beerName": "Mango Bobs",
+  "beerStyle": "ALE",
+  "id": "0a818933-087d-47f2-ad83-2f986ed087eb",
+  "price": "12.95",
+  "quantityOnHand": 12,
+  "upc": "0631234200036",
+  "version": 1
+}
+```
   
 #### [Notes from the course:](#top)
 1. [Java Messaging Service (JMS)](#java-messaging-service-jms)
@@ -28,7 +39,6 @@
     - JMS is a standard Java API which requires an underlying implementation to be provided
         - For example, JPA - where JPA is the API standard, and Hibernate is the implementation
     - JMS is highly scalable and allows you to loosely couple applications using **asynchronous messaging**
-    
 - JMS Implementations
     - Amazon SQS
     - Apache ActiveMQ - used in this project
@@ -37,7 +47,7 @@
     - OracleAQ - (closed source / paid)
     - RabbitMQ
     - Many more!
-    
+
 - Why use JMS over REST?
     - JMS is a true messaging service
     - Asynchronous - send it and forget it!
