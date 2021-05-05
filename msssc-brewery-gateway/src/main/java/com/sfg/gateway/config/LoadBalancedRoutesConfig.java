@@ -6,24 +6,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("!local-discovery")
+@Profile("local-discovery")
 @Configuration
-public class LocalHostRouteConfig {
+public class LoadBalancedRoutesConfig {
 
     @Bean
-    public RouteLocator localhostRoutes(RouteLocatorBuilder builder){
+    public RouteLocator loadBalancedRoutes(RouteLocatorBuilder builder){
 
-        // eg. http://localhost:9090/api/v2/beer/beer
-        // http://localhost:9090/api/v2/beer/0a818933-087d-47f2-ad83-2f986ed087eb
         return builder.routes()
                 .route(r -> r.path("/api/v2/beer*", "/api/v2/beer/*")
-                        .uri("http://localhost:8080")
+                        // "lb" is for load balanced - and this is how the Gateway will look up services on Eureka
+                        .uri("lb://beer-service")
                         .id("beer-service"))
                 .route(r -> r.path("/api/v1/customers/**")
-                        .uri("http://localhost:8081")
+                        .uri("lb://order-service")
                         .id("order-service"))
                 .route(r -> r.path("/api/v1/beer/*/inventory")
-                        .uri("http://localhost:8082")
+                        .uri("lb://inventory-service")
                         .id("inventory-service"))
                 .build();
     }
