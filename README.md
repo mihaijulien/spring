@@ -30,6 +30,7 @@ Beer object example:
 2. [Data Source(MySQL) Connection Pooling](#data-sourcemysql-connection-pooling)
 3. [HikariCP with Spring Boot 2.x](#hikaricp-with-spring-boot-2x)
 4. [Ehcache](#ehcache)
+5. [Building Docker Images with Maven](#docker)
  
 
 #### [Java Messaging Service (JMS)](#java-messaging-service-jms)
@@ -161,5 +162,24 @@ Beer object example:
 - each running instance is going to have its own local cache, so if you have 3 instances running you have 1 in 3 chance of getting a cache response
 - there are technologies available where instances can share a cache 
 - Ehcache can be configured so that if you do have multiple instances running, it reads from a single cache
+
+[Top](#top)
+
+#### [Building Docker Images with Maven](#docker)
+
+- Maven can be configured to build and work with Docker images
+- Capability is done with Maven plugins
+- Several very good options available
+- Will be using Fabric8's Maven Docker Plugin - (pronounced fabricate)
+  - Very versatile plugin w/ rich capabilities - only using for build
+  - Fabric8 is a DevOps platform for Kubernetes and Openshift - worth becoming more familiar with
+  
+**Docker integration**
+- The Maven plugins work with Docker installed on your system
+  - Generally, will auto detect the Docker deamon
+  - This can be different dependeing on your operating system
+- If Fabric8 cannot connect to Docker you may need to configur ethe plugin
+  - Under the Maven POM properties element:
+    - Set property "docker.host" for your operating system
 
 [Top](#top)
